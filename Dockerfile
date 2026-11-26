@@ -25,7 +25,10 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN npm install && npm run build
 
-ENV PORT=10000
-EXPOSE 10000
+# Ensure storage directories have write permissions
+RUN chmod -R 777 storage bootstrap/cache
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT}
+ENV PORT=80
+EXPOSE 80
+
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-80}
